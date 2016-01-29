@@ -1,37 +1,26 @@
-# Proposal: [title of project]
-## [subtitle that helps describe the project]
-[Names]
+# Proposal: Password Safe
+## [An application to help protect passwords from theft and forgetfullness]
+[Rachel Orenstein]
 
 ## Needs and Opportunities
-Explain the problem you have noticed that needs to be solved with a project
-like yours. This is also your hook, so make sure you grab our attention.
+Have you ever tried to log in to a webpage or service only to realize that you can't remeber you password? Sure, you could hit the "Forgot password" button, but some logins don't have one and many are complicated and require you to jump through several hoops to reset your password. 
 
 ## Audience / Clients / Users
-Explain who will benefit from your project. How will you be able to access
-them for testing?
+Anyone with many complex passwords would benefit from a memory not as failable as the human brain. Perenial forgetters like my father, who inspired this project, will also find this useful, no matter how many passwords they have or how complex the passwords are.
 
 ## Product
-What is the actual product you will show this spring. This project may be made
-of atoms or bits, but you must have something to show. I'm not interested
-seeing a bunch of great ideas at the end of the year. I want to see things.
+The final product will be a downloadable desktop application that not only remembers and protects passwords, but is also pleasing to the eye. Users would only have to remember one password (to access their other passwords) instead of five or ten. This would also allow users to create more unique passwords, increasing safety across all of their accounts. Inside the application, users could search by service (e.g. Google, Facebook, Instagram), username (e.g. jane.doe123), or category (e.g. email, banking, social media). There would also be a button that would copy the whole password to the clipboard when clicked. An "Add Password" button would take users to screen where they could input the name of the service, username, password, a category, and comments.
 
 ## Timeline
-What is your monthly timeline for this project. I want to see a list of
-deliverables with deadlines. You may find that the timeline needs adjustment
-during the course of the year, which may be fine. Check in with me if that\u2019s
-the case. 
 
-| Date          | Deliverable   |
-| ------------- | ------------- |
-| February 26   | Deliverable 1 |
-| April 1       | Deliverable 2 |
-| April 29      | Deliverable 3 |
+| Date          | Deliverable                                  |
+| ------------- | -------------------------------------------- |
+| February 26   | Basic framework for the storage of passwords |
+| April 1       | Appearance finished                          |
+| April 29      | Final product including safety features      |
 
 ## Reality Check
-I am looking for moonshots here, but even moonshots need budgets. What
-equipment are you going to need? What other capital expenditures do you
-anticipate, and how will you meet them?
+I would like to make the place that the passwords are stored as secure as possible, which I believe would require encryptions, and while I know how encryptions work, I know nothing about how to actually encrypt something. I would need to learn this. There is a possiblility of adding cloud storage for passwords so a user can access their passwords on more than one device. I have even less knowledge about how to do this than I do about encryptions. I would also need to learn how to add graphics to my application.
 
 ## Conclusion
-Wrap it up. Why are you fired up about this project? Inspire us to support you,
-and give us a great reason to approve your project.
+While the functionality I want can be achieved on many web browsers and even in Microsoft Excel, a dedicated application would be more simple and intuitive to use for those who are not as tech savvy. In the end, if the user's life is made easier and less stressful because they don't have to constantly reset passwords they've forgotten, my objective is achieved.
