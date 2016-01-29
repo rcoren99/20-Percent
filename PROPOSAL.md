@@ -3,7 +3,7 @@
 Rachel Orenstein
 
 ## Needs and Opportunities
-Have you ever tried to log in to a webpage or service only to realize that you can't remeber you password? Sure, you could hit the "Forgot password" button, but some logins don't have one and many are complicated and require you to jump through several hoops to reset your password. 
+Have you ever tried to log in to a webpage or service only to realize that you can't remember you password? Sure, you could hit the "Forgot password" button, but some logins don't have one and many are complicated and require you to jump through several hoops to reset your password. 
 
 ## Audience / Clients / Users
 Anyone with many complex passwords would benefit from a memory not as failable as the human brain. Perenial forgetters like my father, who inspired this project, will also find this useful, no matter how many passwords they have or how complex the passwords are.
