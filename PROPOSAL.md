@@ -1,6 +1,6 @@
 # Proposal: Password Safe
 ## An application to help protect passwords from theft and forgetfullness
-Rachel Orenstein
+Rachel Orenstein (GitHub username: rcoren99)
 
 ## Needs and Opportunities
 Have you ever tried to log in to a webpage or service only to realize that you can't remember you password? Sure, you could hit the "Forgot password" button, but some logins don't have one and many are complicated and require you to jump through several hoops to reset your password. 
