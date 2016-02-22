@@ -15,3 +15,12 @@ This week, I researched how to make frames in Java! I read Java tutorials at the
 
 Hasta la Vista,
 Rachel Orenstein
+
+#Developmnet Journal
+##Week 3
+2/21/16
+
+I made a window appear!!! Hurray to small accomplishments. I also made a Password class with parameters for service, username, category, password, and comments. These will be the fields that the user can fill out to be able to sort, filter, and search their list of passwords. I have been doing more research into making a window, and its all very confusing. There are so many layers and things that you can add that it's a little overwhelming. However, I hope to have the basic window complete by Friday for the check point thing. I was really excited to see that they have password fields and text fields along with menu bars, and that everything is customization by color and size. I also figured out that the frame will take the appearance of whatever operating system in which the window is opened. I hope to be an expert at adding components by the end of this coming week!
+
+See ya round like a donut,
+Rachel Orenstein
