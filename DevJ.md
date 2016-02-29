@@ -24,3 +24,12 @@ I made a window appear!!! Hurray to small accomplishments. I also made a Passwor
 
 See ya round like a donut,
 Rachel Orenstein
+
+#Development Journal
+##Week 4
+2/28/16
+
+This week was very difficult. I had lots of problems figuring out how layouts work for components and how to make the components themselves do what I need them to do. I did make the classes necessary to create and store passwords on the inside of the code. However, the outside is far from finished. I need to figure out how to change the screen when the user needs to be directed to a different one. Currently, when a button is pressed that would do this, a new window appears instead. I also need to finish the GUI for each of the other screens that the application will need. For now, I have made good headway in laying out basic components, however, I anticipate problems when it comes to integrating the password storage system with the interface. Hopefully, the coding will become easier as my understanding of Swing components grows.
+
+Smooth sailing,
+Rachel
