@@ -10,9 +10,9 @@ public class Password
     private String service;
     private String username;
     private String category;
-    private String password;
+    private char[] password;
     private String comment;
-    public Password(String service, String username, String category, String password, String comment){
+    public Password(String service, String username, String category, char[] password, String comment){
         this.service=service;
         this.username=username;
         this.category=category;
@@ -35,7 +35,7 @@ public class Password
         return username;
     }
     
-    public String addPassword(String x){
+    public char[] addPassword(char[] x){
         password=x;
         return password;
     }
@@ -51,16 +51,11 @@ public class Password
     
     public void delUsername(){username="";}
     
-    public boolean passAreEqual(String x){
-        if(password.equals(x))return true;
-        return false;
-    }
-    
     public String getService(){return service;}
     
     public String getCategory(){return category;}
     
     public String getUsername(){return username;}
     
-    public String getPassword(){return password;}
+    public char[] getPassword(){return password;}
 }
