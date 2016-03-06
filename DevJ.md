@@ -33,3 +33,13 @@ This week was very difficult. I had lots of problems figuring out how layouts wo
 
 Smooth sailing,
 Rachel
+
+#Development Journal
+##Week 5
+3/6/16
+
+Is it really week five already? Time flies when you have to fix every one of your 1980329875034850298 spelling mistakes every time you compile.
+I feel as though I have finally figured Swing out this week. I can nest JPanels like a pro and now the screens switch without making a new JFrame every single time (CardLayout was the solution). I have also found that the explanations on the webpage generally suck, but the code from the example programs is really helpful. Don't really want to read their 5 paragraph explanations? Just copy the code into a new BlueJ class, run the program, look at the code, and BOOM you have all the knowledge. In all honesty, I am feeling more optimistic that I will complete this in time. My problem for next week is to store the data (passwords and such) without it resetting itself every time I run the program.
+
+Wish me luck,
+Rachel
