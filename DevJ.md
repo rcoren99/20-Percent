@@ -43,3 +43,13 @@ I feel as though I have finally figured Swing out this week. I can nest JPanels 
 
 Wish me luck,
 Rachel
+
+#Development Journal
+##Week 6
+3/14/2016
+
+This week my computer broke. Just perfect, I know. :-| However, I did make some progress on the GUI for my main screen. I added most, if not all (I haven't finalized the design yet), of the buttons and labels, and I have decided that a table is the most efficient way to display the password data. I have yet to make this table, or figure out how to store data, but that is what I will figure out this coming week. After that, I will focus on possibly including an encryption and making the application's appearance more aesthetically pleasing. I hope I can get my computer working again and make good progress on my project.
+How many weeks do we have left again?
+
+Happy Pi Day,
+Rachel
