@@ -43,3 +43,12 @@ I feel as though I have finally figured Swing out this week. I can nest JPanels 
 
 Wish me luck,
 Rachel
+
+#Development Journal
+##Week 6
+3/19/16
+
+I have been hard at work adding new screens and connecting all of my JButtons to action events this week. I made a new screen for settings. This will enable users to change the name that is displayed on the main screen and the main password that unlocks the safe. The settings button on the main screen connects the settings screen to everything else, and "done" and "cancel" buttons save or discard the changes. One thing I am experimenting with in the settings screen is popup screens. In the settings screen, there are buttons for changing the name or main password. I want to make a separate screen pop up when either of those buttons are clicked, because there would only be one text field, an "ok" button, and a "cancel" button. My decision to do this factors into the appearance on the safe, because such a small amount of components would look weird on a full size screen. This coming week I will finish this and hopefully complete all of the screens and connect all of the JButtons.
+
+Thank God for Spring Break,
+Rachel
