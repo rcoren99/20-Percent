@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.util.*;
 /**
  * Write a description of class Frame here.
@@ -10,8 +11,9 @@ import java.util.*;
  */
 public class Safe implements ActionListener
 {
-    private ArrayList<Password> safe=new ArrayList<Password>();
-    private static char[] mainPassword={};
+    private static char[] mainPassword={'s'};
+    private Boolean tru=new Boolean(true);
+    private Boolean fals=new Boolean(false);
 
     private JFrame frame=new JFrame("Password Vault");
     private static String LOGINSCREEN="Login screen card";
@@ -19,6 +21,8 @@ public class Safe implements ActionListener
     private static String MAINSCREEN="Main screen card";
     private static String APSCREEN="Add password screen card";
     private static String DNESCREEN="Screen does not exist card";
+    private static String SETSCREEN="Settings screen card";
+    private static String EDITSCREEN="Edit password screen card";
     private JPanel contentPane=new JPanel(new CardLayout());
 
     private JPanel contentPaneLogin;
@@ -49,8 +53,15 @@ public class Safe implements ActionListener
     private static String CANCELSU = "cancel";
 
     private JLabel labelMain;
+    private Object[][] allPass={{fals,"","","","",""}};
+    private JTable table;
+    private JScrollPane scroll;
     private JButton addPassButton;
+    private JLabel nameLabelMain;
     private static String ADDPASSMAIN = "add password";
+    private static String LOGOUT="logout";
+    private static String SETTINGS="settings";
+    private static String EDITPASS="edit password";
     private JPanel contentPaneMain;
 
     private JPanel contentPaneAP;
@@ -67,18 +78,41 @@ public class Safe implements ActionListener
 
     private JLabel label;
     private JPanel contentPaneDNE;
+
+    private static String DONE="finalize settings changes";
+    private static String CANCELSET="cancel setting change";
+    private static String CHANGENAME="change name";
+    private static String CHANGEPASS="change password";
+    private static String DELACCT="delete account";
+    private JPanel contentPaneSet;
+
+    private static String SAVE="save password changes";
+    private static String CANCELEDIT="cancel password change";
+    private static String DELETE="Delete password";
+    private JPanel contentPaneEdit;
+    private JTextField serviceFieldE;
+    private JTextField categoryFieldE;
+    private JTextField usernameFieldE;
+    private JTextField passwordFieldE;
+    private JTextArea commentsFieldE;
+
+    private String name="Rachel";
     public Safe(){
         loginScreenGUI();
         signupScreenGUI();
         mainScreenGUI();
         addPasswordScreenGUI();
         screenDNEGUI();
+        settingsScreenGUI();
+        editPassScreenGUI();
 
         contentPane.add(contentPaneLogin,LOGINSCREEN);
         contentPane.add(contentPaneSU,SIGNUPSCREEN);
         contentPane.add(contentPaneMain,MAINSCREEN);
         contentPane.add(contentPaneAP,APSCREEN);
         contentPane.add(contentPaneDNE,DNESCREEN);
+        contentPane.add(contentPaneSet,SETSCREEN);
+        contentPane.add(contentPaneEdit,EDITSCREEN);
 
         frame.setContentPane(contentPane);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -185,14 +219,105 @@ public class Safe implements ActionListener
         contentPaneSU.add(buttonPaneSU,b);
     }
 
+    class MainTableModel extends AbstractTableModel{
+        String[] colHeader={"Edit","Service","Username","Password","Category","Comments"};
+        Object[][] passAry=allPass;
+        public int getColumnCount(){
+            return colHeader.length;
+        }
+
+        public int getRowCount(){
+            return passAry.length;
+        }
+
+        public String getColumnName(int col){
+            return colHeader[col];
+        }
+
+        public Object getValueAt(int row,int col){
+            return passAry[row][col];
+        }
+
+        public Class getColumnClass(int c){
+            return getValueAt(0,c).getClass();
+        }
+
+        public boolean isCellEditable(int row,int col){
+            if (col<1)return true;
+            else return false;
+        }
+
+        public void setValueAt(Object value,int row,int col){
+            passAry[row][col]=value;
+            fireTableCellUpdated(row,col);
+        }
+    }
+
     public void mainScreenGUI(){
         labelMain=new JLabel("Main screen will go here.");
+        labelMain.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        /*char[] pass1={'p','a','s','s','w','o','r','d'};
+        Password one=new Password("Google","janedoe123","Email",pass1,"Tester");
+        Object[][] allPass={{one.getService(),one.getUsername(),one.getPassword(),one.getCategory(),one.getComments()}};
+        allPass=new Object[1][6];
+        col=new String[]{"Edit","Service","Username","Password","Category","Comments"};*/
+        table=new JTable(new MainTableModel());
+        scroll=new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+
         addPassButton=new JButton("Add Password");
         addPassButton.setActionCommand(ADDPASSMAIN);
         addPassButton.addActionListener(this);
-        contentPaneMain=new JPanel();
-        contentPaneMain.add(labelMain);
-        contentPaneMain.add(addPassButton);
+
+        JButton logoutButton=new JButton("Logout");
+        logoutButton.setActionCommand(LOGOUT);
+        logoutButton.addActionListener(this);
+
+        JButton settingsButton=new JButton("Settings");
+        settingsButton.setActionCommand(SETTINGS);
+        settingsButton.addActionListener(this);
+
+        nameLabelMain=new JLabel(name+"'s Vault");
+
+        JPanel upperPane=new JPanel();
+        upperPane.add(nameLabelMain);
+        upperPane.add(logoutButton);
+        upperPane.add(settingsButton);
+        upperPane.add(addPassButton);
+
+        JLabel sortLabel=new JLabel("Sort by:");
+
+        String[] sortVals={"Category","Username","Service"};
+        JComboBox sortField=new JComboBox(sortVals);
+        sortField.setSelectedIndex(1);
+        sortField.addActionListener(this);
+        sortLabel.setLabelFor(sortField);
+
+        JButton editPassButton=new JButton("Edit Selected");
+        editPassButton.setActionCommand(EDITPASS);
+        editPassButton.addActionListener(this);
+
+        JPanel sortEditPane=new JPanel();
+        sortEditPane.add(sortLabel);
+        sortEditPane.add(sortField);
+        sortEditPane.add(editPassButton);
+        sortEditPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel lowerPane=new JPanel();
+        lowerPane.setLayout(new BoxLayout(lowerPane,BoxLayout.PAGE_AXIS));
+        lowerPane.add(sortEditPane);
+        lowerPane.add(scroll);
+
+        contentPaneMain=new JPanel(new GridBagLayout());
+        GridBagConstraints c=new GridBagConstraints();
+        c.gridx=1;
+        c.gridy=0;
+        contentPaneMain.add(upperPane,c);
+        GridBagConstraints b=new GridBagConstraints();
+        b.gridx=1;
+        b.gridy=1;
+        contentPaneMain.add(lowerPane,b);
     }
 
     public void addPasswordScreenGUI(){
@@ -283,6 +408,134 @@ public class Safe implements ActionListener
         contentPaneAP.add(buttonPaneAP,b);
     }
 
+    public void settingsScreenGUI(){
+        JButton changePassButton=new JButton("Change Password");
+        changePassButton.setActionCommand(CHANGEPASS);
+        changePassButton.addActionListener(this);
+
+        JButton changeNameButton=new JButton("Change Name");
+        changeNameButton.setActionCommand(CHANGENAME);
+        changeNameButton.addActionListener(this);
+
+        JButton delAcctButton=new JButton("Delete Account");
+        delAcctButton.setActionCommand(DELACCT);
+        delAcctButton.addActionListener(this);
+
+        JButton doneButton=new JButton("Done");
+        doneButton.setActionCommand(DONE);
+        doneButton.addActionListener(this);
+
+        JButton cancelButtonSet=new JButton("Cancel");
+        cancelButtonSet.setActionCommand(CANCELSET);
+        cancelButtonSet.addActionListener(this);
+
+        JPanel setBP=new JPanel();
+        setBP.add(doneButton);
+        setBP.add(cancelButtonSet);
+
+        JPanel buttonPaneSet=new JPanel();
+        buttonPaneSet.setLayout(new BoxLayout(buttonPaneSet,BoxLayout.PAGE_AXIS));
+        buttonPaneSet.add(changeNameButton);
+        buttonPaneSet.add(changePassButton);
+        buttonPaneSet.add(delAcctButton);
+        buttonPaneSet.add(setBP);
+        changeNameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        changePassButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        delAcctButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        setBP.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        contentPaneSet=new JPanel(new GridBagLayout());
+        GridBagConstraints c=new GridBagConstraints();
+        c.gridx=1;
+        c.gridy=0;
+        contentPaneSet.add(buttonPaneSet,c);
+    }
+
+    public void editPassScreenGUI(){
+        serviceFieldE=new JTextField(15);
+        JLabel serviceLabelE=new JLabel("Service:");
+        serviceLabelE.setLabelFor(serviceFieldE);
+        JPanel servicePaneE=new JPanel();
+        servicePaneE.add(serviceLabelE);
+        servicePaneE.add(serviceFieldE);
+        servicePaneE.setOpaque(true);
+
+        categoryFieldE=new JTextField(15);
+        JLabel categoryLabelE=new JLabel("Category:");
+        categoryLabelE.setLabelFor(categoryFieldE);
+        JPanel categoryPaneE=new JPanel();
+        categoryPaneE.add(categoryLabelE);
+        categoryPaneE.add(categoryFieldE);
+        categoryPaneE.setOpaque(true);
+
+        usernameFieldE=new JTextField(15);
+        JLabel usernameLabelE=new JLabel("Username:");
+        usernameLabelE.setLabelFor(usernameFieldE);
+        JPanel usernamePaneE=new JPanel();
+        usernamePaneE.add(usernameLabelE);
+        usernamePaneE.add(usernameFieldE);
+        usernamePaneE.setOpaque(true);
+
+        passwordFieldE=new JTextField(15);
+        JLabel passwordLabelE=new JLabel("Password:");
+        passwordLabelE.setLabelFor(passwordFieldE);
+        JPanel passwordPaneE=new JPanel();
+        passwordPaneE.add(passwordLabelE);
+        passwordPaneE.add(passwordFieldE);
+        passwordPaneE.setOpaque(true);
+
+        commentsFieldE=new JTextArea(7,15);
+        JScrollPane cfScrollPaneE=new JScrollPane(commentsFieldE);
+        commentsFieldE.setEditable(true);
+        commentsFieldE.setLineWrap(true);
+        cfScrollPaneE.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        cfScrollPaneE.setPreferredSize(new Dimension(250,125));
+
+        JLabel commentsLabelE=new JLabel("Comments:");
+        commentsLabelE.setLabelFor(commentsFieldE);
+        JPanel commentsPaneE=new JPanel();
+        commentsPaneE.add(commentsLabelE);
+        commentsLabelE.setAlignmentY(Component.TOP_ALIGNMENT);
+        commentsPaneE.add(cfScrollPaneE);
+        commentsPaneE.setOpaque(true);
+
+        JButton delPassButton=new JButton("Delete Password");
+        delPassButton.setActionCommand(DELETE);
+        delPassButton.addActionListener(this);
+
+        JPanel tfPaneE=new JPanel();
+        tfPaneE.setLayout(new BoxLayout(tfPaneE,BoxLayout.PAGE_AXIS));
+        tfPaneE.add(servicePaneE);
+        tfPaneE.add(categoryPaneE);
+        tfPaneE.add(usernamePaneE);
+        tfPaneE.add(passwordPaneE);
+        tfPaneE.add(commentsPaneE);
+        tfPaneE.add(delPassButton);
+        delPassButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton savePassButton=new JButton("Save");
+        savePassButton.setActionCommand(SAVE);
+        savePassButton.addActionListener(this);
+
+        JButton cancelButtonE=new JButton("Cancel");
+        cancelButtonE.setActionCommand(CANCELEDIT);
+        cancelButtonE.addActionListener(this);
+
+        JPanel buttonPaneE=new JPanel();
+        buttonPaneE.add(savePassButton);
+        buttonPaneE.add(cancelButtonE);
+
+        contentPaneEdit=new JPanel(new GridBagLayout());
+        GridBagConstraints c=new GridBagConstraints();
+        c.gridx=1;
+        c.gridy=0;
+        contentPaneEdit.add(tfPaneE,c);
+        GridBagConstraints b=new GridBagConstraints();
+        b.gridx=1;
+        b.gridy=1;
+        contentPaneEdit.add(buttonPaneE,b);
+    }
+
     public void screenDNEGUI(){
         label=new JLabel("Screen does not exist");
         contentPaneDNE=new JPanel();
@@ -304,6 +557,12 @@ public class Safe implements ActionListener
             case 4:
             cl.show(contentPane,APSCREEN);
             break;
+            case 5:
+            cl.show(contentPane,SETSCREEN);
+            break;
+            case 6:
+            cl.show(contentPane,EDITSCREEN);
+            break;
             default:
             cl.show(contentPane,DNESCREEN);
         }
@@ -317,12 +576,13 @@ public class Safe implements ActionListener
         else{
             isCorrect=Arrays.equals(input,correctPassword);
         }
+        Arrays.fill(correctPassword,'0');
         return isCorrect;
     }
 
     public void actionPerformed(ActionEvent e) {
         String cmd=e.getActionCommand();
-
+        int rowToEdit=0;
         if (LOGIN.equals(cmd)) {
             char[] input=mainPass.getPassword();
             if(isPasswordCorrect(input,mainPassword)) {
@@ -333,9 +593,11 @@ public class Safe implements ActionListener
                                 setScreen(3);
                             }
                         });
-                }	
+                }   
             } 
             else JOptionPane.showMessageDialog(frame,"Invalid password","Error Message",JOptionPane.ERROR_MESSAGE);
+            Arrays.fill(input,'0');
+            mainPass.selectAll();
         }
         else if(SIGNUP.equals(cmd)){
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -347,6 +609,7 @@ public class Safe implements ActionListener
         else if(CREATEACCT.equals(cmd)){
             if(isPasswordCorrect(confPassFieldSU.getPassword(),passFieldSU.getPassword())==true){
                 mainPassword=passFieldSU.getPassword();
+                name=nameFieldSU.getText();
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
                             setScreen(3);
@@ -370,7 +633,7 @@ public class Safe implements ActionListener
                 });
         }
         else if(CREATEPASS.equals(cmd)){
-            addItem(serviceField.getText(),categoryField.getText(),usernameField.getText(),passwordField.getPassword(),commentsField.getText());
+            addItem(serviceField.getText(),categoryField.getText(),usernameField.getText(),changeToString(passwordField.getPassword()),commentsField.getText());
 
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
@@ -385,6 +648,114 @@ public class Safe implements ActionListener
                     }
                 });
         }
+        else if(EDITPASS.equals(cmd)){
+            int count=0;
+            for(int r=0;r<allPass.length;r++){
+                if(allPass[r][0].equals(tru)){
+                    count++;
+                    rowToEdit=r;
+                }
+            }
+            if(count==1){
+                serviceFieldE.setText((String)allPass[rowToEdit][1]);
+                categoryFieldE.setText((String)allPass[rowToEdit][4]);
+                usernameFieldE.setText((String)allPass[rowToEdit][2]);
+                passwordFieldE.setText((String)allPass[rowToEdit][3]);
+                commentsFieldE.setText((String)allPass[rowToEdit][5]);
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            setScreen(6);
+                        }
+                    });
+            }
+            else JOptionPane.showMessageDialog(frame,"Please select one line to edit.","Error Message",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(SAVE.equals(cmd)){
+            editItem(rowToEdit,serviceFieldE.getText(),categoryFieldE.getText(),usernameFieldE.getText(),passwordFieldE.getText(),commentsFieldE.getText());
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(3);
+                    }
+                });
+        }
+        else if(CANCELEDIT.equals(cmd)){
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(3);
+                    }
+                });
+        }
+        else if(DELETE.equals(cmd)){
+            delItem(rowToEdit);
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(3);
+                    }
+                });
+        }
+        else if(LOGOUT.equals(cmd)){
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(1);
+                    }
+                });
+        }
+        else if(SETTINGS.equals(cmd)){
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(5);
+                    }
+                });
+        }
+        else if(DONE.equals(cmd)){
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(3);
+                    }
+                });
+        }
+        else if(CANCELSET.equals(cmd)){
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        setScreen(3);
+                    }
+                });
+        }
+        else if(CHANGENAME.equals(cmd)){
+            String msg="Input your new name";
+            String btn1="Change";
+            String btn2="Cancel";
+            Object[] buttons={btn1,btn2};
+            String s=(String)JOptionPane.showInputDialog(frame,msg,"Name Changer",JOptionPane.INFORMATION_MESSAGE,null,null,"Input new name here");
+            if(s!=null){
+                name=s;
+                nameLabelMain.setText(name+"'s Vault");
+            }
+        }
+        else if(CHANGEPASS.equals(cmd)){
+            JPasswordField field=new JPasswordField(15);
+            String msg="Input your new password";
+            Object[] array={msg,field};
+            String btn1="Change";
+            String btn2="Cancel";
+            Object[] buttons={btn1,btn2};
+            int opt=JOptionPane.showOptionDialog(frame,array,"Password Changer",JOptionPane.OK_CANCEL_OPTION,JOptionPane.INFORMATION_MESSAGE,null,buttons,buttons[0]);
+            if(opt==JOptionPane.OK_OPTION){
+                mainPassword=field.getPassword();
+            }
+        }
+        else if(DELACCT.equals(cmd)){
+            int opt=JOptionPane.showConfirmDialog(frame,"Would you like to delete your account?\nDoing so will delete all of your data permanently.","Confirm Delete Account",JOptionPane.YES_NO_OPTION);
+            if(opt==JOptionPane.YES_OPTION){
+                name="";
+                mainPassword=null;
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            setScreen(1);
+                        }
+                    });
+            }
+        }
     }
 
     public static void main(String[] args){
@@ -395,12 +766,54 @@ public class Safe implements ActionListener
             });
     }
 
-    public void addItem(String serv,String user,String cate,char[] pass,String comm){
-        safe.add(new Password(serv,user,cate,pass,comm));
+    public String changeToString(char[] ary){
+        String s="";
+        for(int i=0;i<ary.length;i++){
+            s+=ary[i];
+        }
+        return s;
     }
 
-    public void delItem(int x){
-        safe.remove(x);
+    public void addItem(String serv,String user,String cate,String pass,String comm){
+        Object[][] temp=allPass;
+        allPass=new Object[temp.length+1][6];
+        if(allPass.length>=0){
+            for(int row=0;row<temp.length;row++){
+                for(int col=0;col<temp[0].length;col++){
+                    allPass[row][col]=temp[row][col];
+                }
+            }
+        }
+        allPass[temp.length][0]=fals;
+        allPass[temp.length][1]=serv;
+        allPass[temp.length][2]=user;
+        allPass[temp.length][3]=pass;
+        allPass[temp.length][4]=cate;
+        allPass[temp.length][5]=comm;
+        table=new JTable(new MainTableModel());
+        scroll.setViewportView(table);
     }
 
+    public void delItem(int r){
+        Object[][] temp=allPass;
+        allPass=new Object[temp.length-1][temp[0].length];
+        for(int row=r+1;row<allPass.length;row++){
+            for(int col=0;col<temp[0].length;col++){
+                allPass[row-1][col]=temp[row][col];
+            }
+        }
+        table=new JTable(new MainTableModel());
+        scroll.setViewportView(table);
+    }
+
+    public void editItem(int row,String serv,String user,String cate,String pass,String comm){
+        allPass[row][0]=fals;
+        allPass[row][1]=serv;
+        allPass[row][2]=user;
+        allPass[row][3]=pass;
+        allPass[row][4]=cate;
+        allPass[row][5]=comm;
+        table=new JTable(new MainTableModel());
+        scroll.setViewportView(table);
+    }
 }

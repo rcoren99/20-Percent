@@ -58,4 +58,6 @@ public class Password
     public String getUsername(){return username;}
     
     public char[] getPassword(){return password;}
+    
+    public String getComments(){return comment;}
 }
