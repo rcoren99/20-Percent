@@ -52,3 +52,16 @@ I have been hard at work adding new screens and connecting all of my JButtons to
 
 Thank God for Spring Break,
 Rachel
+
+#Development Journal
+##Week 7
+4/3/16
+
+At this point, I have finished one hundred percent of the GUI and most of the basic functionality. The functionality I need to put in includes finding a way to store the passwords without Java resetting them every time I close the program. I also need to implement the sorting function in the JTable in the main screen. In addition to this, there are a few little things I would like to fix, like clearing the main password field after login. After this is complete I will look into encryptions and some viable options for adding encryption to my program. Overall I am very happy with the results of my project so far. It is coming out exactly how I had envisioned it.
+If you want to look through the program:
+1. Unfortunately none of the info saves if you close out of the window, so keep that in mind.
+2. The password for the login screen is "s", or you can create a new account. 
+3. The sort function doesn't work yet.
+
+Enjoy!
+Rachel
