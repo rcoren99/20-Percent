@@ -12,7 +12,7 @@ public class Password
     private String category;
     private char[] password;
     private String comment;
-    public Password(String service, String username, String category, char[] password, String comment){
+    public Password(String service, String username, char[] password,String category, String comment){
         this.service=service;
         this.username=username;
         this.category=category;
@@ -57,7 +57,7 @@ public class Password
     
     public String getUsername(){return username;}
     
-    public char[] getPassword(){return password;}
+    public char[] getPass(){return password;}
     
     public String getComments(){return comment;}
 }

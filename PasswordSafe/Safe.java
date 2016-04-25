@@ -8,12 +8,15 @@ import java.util.*;
  * 
  * @author (your name) 
  * @version (a version number or a date)
+ * 
  */
 public class Safe implements ActionListener
 {
+    private static ArrayList<Password> vault=new ArrayList<Password>();
     private static char[] mainPassword={'s'};
     private Boolean tru=new Boolean(true);
     private Boolean fals=new Boolean(false);
+    private int rowToEdit;
 
     private JFrame frame=new JFrame("Password Vault");
     private static String LOGINSCREEN="Login screen card";
@@ -53,7 +56,7 @@ public class Safe implements ActionListener
     private static String CANCELSU = "cancel";
 
     private JLabel labelMain;
-    private Object[][] allPass={{fals,"","","","",""}};
+    private Object[][] allPass={{fals,"Google","janedoe123","jd123456","Email","Example"}};
     private JTable table;
     private JScrollPane scroll;
     private JButton addPassButton;
@@ -93,8 +96,9 @@ public class Safe implements ActionListener
     private JTextField serviceFieldE;
     private JTextField categoryFieldE;
     private JTextField usernameFieldE;
-    private JTextField passwordFieldE;
+    private JPasswordField passwordFieldE;
     private JTextArea commentsFieldE;
+    private JPanel passwordPaneE;
 
     private String name="Rachel";
     public Safe(){
@@ -257,18 +261,19 @@ public class Safe implements ActionListener
         labelMain=new JLabel("Main screen will go here.");
         labelMain.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        /*char[] pass1={'p','a','s','s','w','o','r','d'};
-        Password one=new Password("Google","janedoe123","Email",pass1,"Tester");
-        Object[][] allPass={{one.getService(),one.getUsername(),one.getPassword(),one.getCategory(),one.getComments()}};
-        allPass=new Object[1][6];
-        col=new String[]{"Edit","Service","Username","Password","Category","Comments"};*/
         table=new JTable(new MainTableModel());
+        //table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         scroll=new JScrollPane(table);
-        table.setFillsViewportHeight(true);
 
         addPassButton=new JButton("Add Password");
         addPassButton.setActionCommand(ADDPASSMAIN);
         addPassButton.addActionListener(this);
+
+        JButton editPassButton=new JButton("Edit Selected");
+        editPassButton.setActionCommand(EDITPASS);
+        editPassButton.addActionListener(this);
 
         JButton logoutButton=new JButton("Logout");
         logoutButton.setActionCommand(LOGOUT);
@@ -285,8 +290,9 @@ public class Safe implements ActionListener
         upperPane.add(logoutButton);
         upperPane.add(settingsButton);
         upperPane.add(addPassButton);
+        upperPane.add(editPassButton);
 
-        JLabel sortLabel=new JLabel("Sort by:");
+        /*JLabel sortLabel=new JLabel("Sort by:");
 
         String[] sortVals={"Category","Username","Service"};
         JComboBox sortField=new JComboBox(sortVals);
@@ -294,19 +300,15 @@ public class Safe implements ActionListener
         sortField.addActionListener(this);
         sortLabel.setLabelFor(sortField);
 
-        JButton editPassButton=new JButton("Edit Selected");
-        editPassButton.setActionCommand(EDITPASS);
-        editPassButton.addActionListener(this);
-
         JPanel sortEditPane=new JPanel();
         sortEditPane.add(sortLabel);
         sortEditPane.add(sortField);
         sortEditPane.add(editPassButton);
-        sortEditPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        sortEditPane.setAlignmentX(Component.LEFT_ALIGNMENT);*/
 
         JPanel lowerPane=new JPanel();
         lowerPane.setLayout(new BoxLayout(lowerPane,BoxLayout.PAGE_AXIS));
-        lowerPane.add(sortEditPane);
+        //lowerPane.add(sortEditPane);
         lowerPane.add(scroll);
 
         contentPaneMain=new JPanel(new GridBagLayout());
@@ -379,10 +381,10 @@ public class Safe implements ActionListener
         JPanel tfPaneAP=new JPanel();
         tfPaneAP.setLayout(new BoxLayout(tfPaneAP,BoxLayout.PAGE_AXIS));
         tfPaneAP.add(servicePane);
-        tfPaneAP.add(categoryPane);
         tfPaneAP.add(usernamePane);
         tfPaneAP.add(passwordPane);
         tfPaneAP.add(confPassPane);
+        tfPaneAP.add(categoryPane);
         tfPaneAP.add(commentsPane);
 
         JButton createPassButton=new JButton("Create Password");
@@ -476,10 +478,10 @@ public class Safe implements ActionListener
         usernamePaneE.add(usernameFieldE);
         usernamePaneE.setOpaque(true);
 
-        passwordFieldE=new JTextField(15);
+        passwordFieldE=new JPasswordField(15);
         JLabel passwordLabelE=new JLabel("Password:");
         passwordLabelE.setLabelFor(passwordFieldE);
-        JPanel passwordPaneE=new JPanel();
+        passwordPaneE=new JPanel();
         passwordPaneE.add(passwordLabelE);
         passwordPaneE.add(passwordFieldE);
         passwordPaneE.setOpaque(true);
@@ -506,9 +508,9 @@ public class Safe implements ActionListener
         JPanel tfPaneE=new JPanel();
         tfPaneE.setLayout(new BoxLayout(tfPaneE,BoxLayout.PAGE_AXIS));
         tfPaneE.add(servicePaneE);
-        tfPaneE.add(categoryPaneE);
         tfPaneE.add(usernamePaneE);
         tfPaneE.add(passwordPaneE);
+        tfPaneE.add(categoryPaneE);
         tfPaneE.add(commentsPaneE);
         tfPaneE.add(delPassButton);
         delPassButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -576,15 +578,14 @@ public class Safe implements ActionListener
         else{
             isCorrect=Arrays.equals(input,correctPassword);
         }
-        Arrays.fill(correctPassword,'0');
         return isCorrect;
     }
 
     public void actionPerformed(ActionEvent e) {
         String cmd=e.getActionCommand();
-        int rowToEdit=0;
         if (LOGIN.equals(cmd)) {
             char[] input=mainPass.getPassword();
+            mainPass.setText("");
             if(isPasswordCorrect(input,mainPassword)) {
                 if(mainPassword.length==0)JOptionPane.showMessageDialog(frame,"Invalid password","Error Message",JOptionPane.ERROR_MESSAGE);
                 else{
@@ -596,8 +597,6 @@ public class Safe implements ActionListener
                 }   
             } 
             else JOptionPane.showMessageDialog(frame,"Invalid password","Error Message",JOptionPane.ERROR_MESSAGE);
-            Arrays.fill(input,'0');
-            mainPass.selectAll();
         }
         else if(SIGNUP.equals(cmd)){
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -626,6 +625,12 @@ public class Safe implements ActionListener
                 });
         }
         else if(ADDPASSMAIN.equals(cmd)){
+            serviceField.setText("");
+            usernameField.setText("");
+            passwordField.setText("");
+            confPassField.setText("");
+            categoryField.setText("");
+            commentsField.setText("");
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         setScreen(4);
@@ -633,7 +638,7 @@ public class Safe implements ActionListener
                 });
         }
         else if(CREATEPASS.equals(cmd)){
-            addItem(serviceField.getText(),categoryField.getText(),usernameField.getText(),changeToString(passwordField.getPassword()),commentsField.getText());
+            addItem(serviceField.getText(),usernameField.getText(),changeToString(passwordField.getPassword()),passwordField.getPassword(),categoryField.getText(),commentsField.getText());
 
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
@@ -660,7 +665,9 @@ public class Safe implements ActionListener
                 serviceFieldE.setText((String)allPass[rowToEdit][1]);
                 categoryFieldE.setText((String)allPass[rowToEdit][4]);
                 usernameFieldE.setText((String)allPass[rowToEdit][2]);
-                passwordFieldE.setText((String)allPass[rowToEdit][3]);
+                passwordPaneE.remove(1);
+                passwordFieldE=new JPasswordField((String)allPass[rowToEdit][3],15);
+                passwordPaneE.add(passwordFieldE,1);
                 commentsFieldE.setText((String)allPass[rowToEdit][5]);
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
                         public void run() {
@@ -671,7 +678,7 @@ public class Safe implements ActionListener
             else JOptionPane.showMessageDialog(frame,"Please select one line to edit.","Error Message",JOptionPane.ERROR_MESSAGE);
         }
         else if(SAVE.equals(cmd)){
-            editItem(rowToEdit,serviceFieldE.getText(),categoryFieldE.getText(),usernameFieldE.getText(),passwordFieldE.getText(),commentsFieldE.getText());
+            editItem(rowToEdit,serviceFieldE.getText(),usernameFieldE.getText(),changeToString(passwordFieldE.getPassword()),passwordFieldE.getPassword(),categoryFieldE.getText(),commentsFieldE.getText());
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         setScreen(3);
@@ -759,6 +766,7 @@ public class Safe implements ActionListener
     }
 
     public static void main(String[] args){
+        vault.add(new Password("Google","janedoe123",new char[]{'j','d','1','2','3','4','5','6'},"Email","Example"));
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     new Safe();
@@ -774,7 +782,7 @@ public class Safe implements ActionListener
         return s;
     }
 
-    public void addItem(String serv,String user,String cate,String pass,String comm){
+    public void addItem(String serv,String user,String pass,char[] charPass,String cate,String comm){
         Object[][] temp=allPass;
         allPass=new Object[temp.length+1][6];
         if(allPass.length>=0){
@@ -791,22 +799,33 @@ public class Safe implements ActionListener
         allPass[temp.length][4]=cate;
         allPass[temp.length][5]=comm;
         table=new JTable(new MainTableModel());
+        table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
         scroll.setViewportView(table);
+        vault.add(temp.length,new Password(serv,user,charPass,cate,comm));
     }
 
     public void delItem(int r){
         Object[][] temp=allPass;
         allPass=new Object[temp.length-1][temp[0].length];
-        for(int row=r+1;row<allPass.length;row++){
-            for(int col=0;col<temp[0].length;col++){
-                allPass[row-1][col]=temp[row][col];
+        for(int row1=0;row1<r;row1++){
+            for(int col1=0;col1<temp[0].length;col1++){
+                allPass[row1][col1]=temp[row1][col1];
+            }
+        }
+        for(int row2=r+1;row2<allPass.length;row2++){
+            for(int col2=0;col2<temp[0].length;col2++){
+                allPass[row2-1][col2]=temp[row2][col2];
             }
         }
         table=new JTable(new MainTableModel());
+        table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
         scroll.setViewportView(table);
+        vault.remove(r);
     }
 
-    public void editItem(int row,String serv,String user,String cate,String pass,String comm){
+    public void editItem(int row,String serv,String user,String pass,char[] charPass,String cate,String comm){
         allPass[row][0]=fals;
         allPass[row][1]=serv;
         allPass[row][2]=user;
@@ -814,6 +833,9 @@ public class Safe implements ActionListener
         allPass[row][4]=cate;
         allPass[row][5]=comm;
         table=new JTable(new MainTableModel());
+        table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
         scroll.setViewportView(table);
+        vault.set(row,new Password(serv,user,charPass,cate,comm));
     }
 }
