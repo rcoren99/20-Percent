@@ -78,3 +78,13 @@ If you want to look through the program:
 
 Enjoy!
 Rachel
+
+#Development Journal
+##Week ?
+4/24/16
+
+Since the last development journal, I have implemented a sort function and attempted to make the table expand and contract with the window. As it turns out, JTables have built in sort funcion that only took one line of code to implement. This allows the user to click the column header, which sorts the contents of the column in alphabetical order, or if the user clicks the column header again, the column's contents will sort in reverse alphabetical order. Of course, JTable has more advanced sorting and filtering functions, but based on other password vault applications and my target user base, a user will not need any more functionality.
+As I was testing the main page of my application, I noticed that if the window's width went below a certain point, the table would kind of collapse into a little, unusable square. After some research, I discovered that this does not happen to every table. I obviously want to fix this problem, and I think it has something to do with either the lack of a minimum preffered size, the settings of the JTable, or the container that the ScrollPane is in. I haven't figured this out yet, so that will be one of my goals for this coming week.
+
+Later Vader,
+Rachel
