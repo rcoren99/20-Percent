@@ -88,3 +88,13 @@ As I was testing the main page of my application, I noticed that if the window's
 
 Later Vader,
 Rachel
+
+#Development Journal
+##T-3 Weeks
+5/1/16
+
+I have been doing some more research on xml files and how to code them, but I haven't found very many helpful sites. Also, since I have been focusing on the exporting portion of my program this week, I have put the table resizing thing on the back burner. Hopefully I will be able to clear that issue up once I have figured out the xml coding stuff. After reading some articles online, I think it might have been smarter to do the xml part first. One site I visited explained implementing xml as writing a program to display the data stored by the xml file. I'm hoping that I will not have to redo any major parts of my project.
+This coming week, I will complete the coding for the export to xml method and implement it. I will also complete the coding to import the xml file and take the data to display out of it. One thing I'm struggling with is that when a person adds a password, the code does not construct a new Safe object, but only switches screens. This is also the case when the user logs out of the program. I will have to implement the import and export of the data so that they occur at such times that it always stores the most current data. It will be a busy week!
+
+the One and Only,
+Rachel
