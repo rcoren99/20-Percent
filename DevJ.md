@@ -98,3 +98,14 @@ This coming week, I will complete the coding for the export to xml method and im
 
 the One and Only,
 Rachel
+
+#Development Journal
+##T-2 Weeks
+5/8/16
+
+I FIGURED IT OUT!!! All of the methods using XML work, so the passwords save! One note: the path that the methods use to read the XML file go to my flash drive, so if you want to see how the program works, you need to change the string wherever a new File object is created (That is the exportData() method, the importData() method, and the addItem(), editItem(), and delItem() methods) to reflect wherever you downloaded the program. The password is "s".
+This coming week I will work on fine tuning the XML methods and how they work with the GUI. I want to make the program work so that different accounts would access and display different XML files. I also want to make the JTable on the main screen expandable.
+The next step after this is to implement an encryption, but I don't know if I will have time to do that.
+
+Desperately wishing I had a Time Turner right now,
+Rachel
