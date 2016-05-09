@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+<vault>
+<Password id="1">
+<service>3</service>
+<username>4</username>
+<password>r</password>
+<category> r</category>
+<comment> r</comment>
+</Password>
+<Password id="2">
+<service>t</service>
+<username>t</username>
+<password>t</password>
+<category>t</category>
+<comment>t</comment>
+</Password>
+</vault>
+</data>

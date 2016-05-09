@@ -4,6 +4,11 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.*;
 import java.io.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.*;
 /**
  * Write a description of class Frame here.
  * 
@@ -15,8 +20,8 @@ public class Safe implements ActionListener
 {
     private static ArrayList<Password> vault=new ArrayList<Password>();
     private static char[] mainPassword={'s'};
-    private Boolean tru=new Boolean(true);
-    private Boolean fals=new Boolean(false);
+    private static Boolean tru=new Boolean(true);
+    private static Boolean fals=new Boolean(false);
     private int rowToEdit;
 
     private JFrame frame=new JFrame("Password Vault");
@@ -57,7 +62,7 @@ public class Safe implements ActionListener
     private static String CANCELSU = "cancel";
 
     private JLabel labelMain;
-    private Object[][] allPass={{fals,"Google","janedoe123","jd123456","Email","Example"}};
+    private static Object[][] allPass;
     private JTable table;
     private JScrollPane scroll;
     private JButton addPassButton;
@@ -702,6 +707,7 @@ public class Safe implements ActionListener
                 });
         }
         else if(LOGOUT.equals(cmd)){
+            exportData();
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
                         setScreen(1);
@@ -767,7 +773,11 @@ public class Safe implements ActionListener
     }
 
     public static void main(String[] args){
-        vault.add(new Password("Google","janedoe123",new char[]{'j','d','1','2','3','4','5','6'},"Email","Example"));
+        importData();
+        if(vault.size()==0){
+            allPass=new Object[][]{{fals," "," "," "," "," "}};
+            vault.add(new Password(" "," ",new char[]{' '}," "," "));
+        }
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     new Safe();
@@ -775,39 +785,76 @@ public class Safe implements ActionListener
             });
     }
 
-    public String changeToString(char[] ary){
+    public static String changeToString(char[] ary){
         String s="";
         for(int i=0;i<ary.length;i++){
             s+=ary[i];
         }
         return s;
     }
-    
+
     public void exportData(){
         try{
             File f=new File("data.xml");
             FileWriter fw=new FileWriter(f);
             PrintWriter pw=new PrintWriter(fw);
+            pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             pw.println("<data>");
             pw.println("<vault>");
             for(int i=0;i<vault.size();i++){
-                pw.println("<Password>");
+                pw.println("<Password id=\""+(i+1)+"\">");
                 pw.println("<service>"+vault.get(i).getService()+"</service>");
-                pw.println("<username>"+vault.get(i).getUsername()+"</service>");
-                pw.println("<category>"+vault.get(i).getCategory()+"</category>");
-                pw.println("<comments>"+vault.get(i).getComments()+"</comments>");
+                pw.println("<username>"+vault.get(i).getUsername()+"</username>");
                 String ps="<password>";
                 char[] pa=vault.get(i).getPass();
                 for(int j=0;j<pa.length;j++){
                     ps+=pa[j];
                 }
                 pw.println(ps+"</password>");
+                pw.println("<category>"+vault.get(i).getCategory()+"</category>");
+                pw.println("<comment>"+vault.get(i).getComments()+"</comment>");
                 pw.println("</Password>");
             }
             pw.println("</vault>");
             pw.println("</data>");
             pw.close();
             fw.close();
+        }
+        catch(Exception e){}
+    }
+
+    public static void importData(){
+        try{
+            File f=new File("G:/CompSci/20-Percent/PasswordSafe/data.xml");
+            DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
+            Document doc=dBuilder.parse(f);
+            doc.getDocumentElement().normalize();
+            NodeList passList=doc.getElementsByTagName("Password");
+            if(passList!=null){
+                for(int i=0;i<passList.getLength();i++){
+                    Node pass=passList.item(i);
+                    if(pass.hasChildNodes()){
+                        NodeList parList=pass.getChildNodes();
+                        Password nuPass=new Password(parList.item(1).getTextContent(),
+                                parList.item(3).getTextContent(),
+                                parList.item(5).getTextContent().toCharArray(),
+                                parList.item(7).getTextContent(),
+                                parList.item(9).getTextContent());
+                        vault.add(nuPass);
+                    }
+                }
+                allPass=new Object[vault.size()][6];
+                for(int row=0;row<vault.size();row++){
+                    Password p=vault.get(row);
+                    allPass[row][0]=fals;
+                    allPass[row][1]=p.getService();
+                    allPass[row][2]=p.getUsername();
+                    allPass[row][3]=changeToString(p.getPass());
+                    allPass[row][4]=p.getCategory();
+                    allPass[row][5]=p.getComments();
+                }
+            }
         }
         catch(Exception e){}
     }
@@ -822,17 +869,52 @@ public class Safe implements ActionListener
                 }
             }
         }
+
+        /*try{
+            DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
+            Document doc=dBuilder.parse("G:/CompSci/20-Percent/PasswordSafe/data.xml");
+            doc.getDocumentElement().normalize();
+
+            Element nuPass=doc.createElement("Password");
+            Element[] par=new Element[5];
+            par[0]=doc.createElement("service");
+            par[0].appendChild(doc.createTextNode(serv));
+            par[1]=doc.createElement("username");
+            par[1].appendChild(doc.createTextNode(user));
+            par[2]=doc.createElement("password");
+            par[2].appendChild(doc.createTextNode(pass));
+            par[3]=doc.createElement("category");
+            par[3].appendChild(doc.createTextNode(cate));
+            par[4]=doc.createElement("comment");
+            par[4].appendChild(doc.createTextNode(comm));
+            for(int i=0;i<par.length;i++){
+                nuPass.appendChild(par[i]);
+            }
+            Node v=doc.getFirstChild().getFirstChild();
+            v.appendChild(nuPass);
+
+            TransformerFactory tFact=TransformerFactory.newInstance();
+            Transformer trans=tFact.newTransformer();
+            DOMSource source=new DOMSource(doc);
+            StreamResult res=new StreamResult(new File("G:/CompSci/20-Percent/PasswordSafe/data.xml"));
+            trans.transform(source,res);
+        }
+        catch(Exception e){}*/
+
         allPass[temp.length][0]=fals;
         allPass[temp.length][1]=serv;
         allPass[temp.length][2]=user;
         allPass[temp.length][3]=pass;
         allPass[temp.length][4]=cate;
         allPass[temp.length][5]=comm;
+
         table=new JTable(new MainTableModel());
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true);
         scroll.setViewportView(table);
         vault.add(temp.length,new Password(serv,user,charPass,cate,comm));
+        exportData();
     }
 
     public void delItem(int r){
@@ -852,7 +934,45 @@ public class Safe implements ActionListener
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true);
         scroll.setViewportView(table);
+        /*try{
+            DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
+            Document doc=dBuilder.parse("G:/CompSci/20-Percent/PasswordSafe/data.xml");
+            doc.getDocumentElement().normalize();
+
+            String ident=""+(r+1);
+            int index=-1;
+            NodeList pass=doc.getFirstChild().getFirstChild().getChildNodes();
+            for(int i=0;i<pass.getLength();i++){
+                NamedNodeMap map=pass.item(i).getAttributes();
+                Node attribute=map.getNamedItem("id");
+                if(ident.equals(attribute.getNodeValue())){
+                    pass.item(i).removeChild(attribute);
+                    index=i;
+                }
+            }
+
+            if(index>-1){
+                NamedNodeMap map=pass.item(index).getAttributes();
+                Node attribute=map.getNamedItem("id");
+                attribute.setTextContent(ident);
+                for(int j=index+1;j<pass.getLength();j++){
+                    map=pass.item(index).getAttributes();
+                    attribute=map.getNamedItem("id");
+                    ident+=1;
+                    attribute.setTextContent(ident);
+                }
+            }
+
+            TransformerFactory tFact=TransformerFactory.newInstance();
+            Transformer trans=tFact.newTransformer();
+            DOMSource source=new DOMSource(doc);
+            StreamResult res=new StreamResult(new File("G:/CompSci/20-Percent/PasswordSafe/data.xml"));
+            trans.transform(source,res);
+        }
+        catch(Exception e){}*/
         vault.remove(r);
+        exportData();
     }
 
     public void editItem(int row,String serv,String user,String pass,char[] charPass,String cate,String comm){
@@ -866,6 +986,43 @@ public class Safe implements ActionListener
         table.setFillsViewportHeight(true);
         table.setAutoCreateRowSorter(true);
         scroll.setViewportView(table);
+        /*try{
+            DocumentBuilderFactory dbFactory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder=dbFactory.newDocumentBuilder();
+            Document doc=dBuilder.parse("G:/CompSci/20-Percent/PasswordSafe/data.xml");
+            doc.getDocumentElement().normalize();
+
+            NodeList passes=doc.getElementsByTagName("Password");
+            NodeList param=passes.item(row).getChildNodes();
+            for(int i=0;i<param.getLength();i++){
+                Node par=param.item(i);
+                switch(par.getNodeName()){
+                    case "service":
+                    par.setTextContent(serv);
+                    break;
+                    case "username":
+                    par.setTextContent(user);
+                    break;
+                    case "password":
+                    par.setTextContent(pass);
+                    break;
+                    case "category":
+                    par.setTextContent(cate);
+                    break;
+                    case "comment":
+                    par.setTextContent(comm);
+                    break;
+                }
+            }
+
+            TransformerFactory tFact=TransformerFactory.newInstance();
+            Transformer trans=tFact.newTransformer();
+            DOMSource source=new DOMSource(doc);
+            StreamResult res=new StreamResult(new File("G:/CompSci/20-Percent/PasswordSafe/data.xml"));
+            trans.transform(source,res);
+        }
+        catch(Exception e){}*/
         vault.set(row,new Password(serv,user,charPass,cate,comm));
+        exportData();
     }
 }
