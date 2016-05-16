@@ -15,5 +15,14 @@
 <category>t</category>
 <comment>t</comment>
 </Password>
+<Password id="3">
+<service>test</service>
+<username>test</username>
+<password>test</password>
+<category>test</category>
+<comment>test</comment>
+</Password>
 </vault>
+<mainPass>noo</mainPass>
+<name>Rachel</name>
 </data>
