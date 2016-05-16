@@ -109,3 +109,14 @@ The next step after this is to implement an encryption, but I don't know if I wi
 
 Desperately wishing I had a Time Turner right now,
 Rachel
+
+#Development Journal
+##T-1 Week!
+
+I can't believe this is my last development journal! I don't think it has sunk in yet that I am graduating high school in one week.
+This past week has been very productive. I have made several changes to the import function to accomodate different save locations than just on my flash drive and to allow multiple users (almost). In the middle of the week, I decided that it would be useful to make a second Safe class that contains the last fully functional version of Safe. The name changes based on what fuctionality I am working on, so righ now I believe it is called SafeNoMultUsers, reflecting my current work on adding multiple users.
+In respect to the multiple users function, I have decided to make another screen before users get to the password screen to input a master username. This will identify the file, if any exists, that the user wants to access, and import the password. In the next screen, the user will have to input their password as another safeguard. If the password is correct, the user will be given access to their data.
+Since I have to finish this and debug it, I don't think I will get to putting an encryption on the data.
+
+Looking forward to summer,
+Rachel
